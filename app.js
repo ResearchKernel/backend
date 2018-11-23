@@ -35,10 +35,13 @@ initializeDb(db => {
   app.use(express.static(path.join(__dirname, "public")));
 
   app.use((req, res, next) => {
-    res.append("Access-Control-Allow-Origin", ["*"]);
-    res.append("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE");
-    res.append("Access-Control-Allow-Headers", "Content-Type");
-    res.append("Cache-Control", "no-cache");
+    res.set({
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE",
+      "Access-Control-Allow-Headers": "Content-Type",
+      "Content-Type": "application/json",
+      "Cache-Control": "no-cache"
+    });
     next();
   });
 
