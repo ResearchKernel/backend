@@ -34,6 +34,14 @@ initializeDb(db => {
   app.use(cookieParser());
   app.use(express.static(path.join(__dirname, "public")));
 
+  app.use((req, res, next) => {
+    res.append("Access-Control-Allow-Origin", ["*"]);
+    res.append("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE");
+    res.append("Access-Control-Allow-Headers", "Content-Type");
+    res.append("Cache-Control", "no-cache");
+    next();
+  });
+
   app.get("/", ({ res }) => res.json({ msg: "Status OK" }));
   app.use("/api", require("./routes/index")({ logger, ES, AWS, db }));
 
