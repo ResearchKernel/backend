@@ -2,7 +2,7 @@ module.exports = callback => {
   const models = require("./models");
   const logger = require("../utils/logger");
   models.sequelize
-    .sync({ force: true })
+    .sync()
     .then(function() {
       logger.info("SQL connection successful.");
       return callback(models);
