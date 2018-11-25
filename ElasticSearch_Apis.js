@@ -4,7 +4,7 @@ var client = new elasticsearch.Client({
     log: 'trace'
 });
 
- //****** Sun Nov 25 2018 11: 32: 02 GMT + 0530(India Standard Time) "published": "2018-09-27T11:31:43Z",
+//****** Sun Nov 25 2018 11: 32: 02 GMT + 0530(India Standard Time) "published": "2018-09-27T11:31:43Z",
 
 
 var today = new Date();
@@ -22,25 +22,80 @@ if (mm < 10) {
 }
 
 today = yyyy + '-' + mm + '-' + dd;
-console.log(today);
-   
+
 client.ping({
 
-},async function getPapersOfToday(error) {    
-     
-    const response = await client.search({
-    index: 'data',
-    type: 'paper_metadata',
-    body: {
-        query: {
-            match: {
-                published: today
-            }
-        }
-    }
-})
+}, async function getPapersByDate(error) {
+    
+    date = yyyy + '-' + mm + '-' + Number(dd - 1);
+    
+        const lastOneDayPapers = await client.search({
+            index: 'data',
+            type: 'paper_metadata',
+            body: {
+                query: {
+                    match: {
+                        published: date
+                        }
+                    }
+                }
+            })
 
-for (const article of response.hits.hits) {
-    console.log('article:', article);
-}
-    }); 
+        for (const article of lastOneDayPapers.hits.hits) {
+             console.log('lastOneDayPapers: ', lastOneDayPapers);
+            }
+
+    date2 = yyyy + '-' + mm + '-' + Number(dd - 2);
+    date3 = yyyy + '-' + mm + '-' + Number(dd - 3);
+      
+        const lastThreeDaysPapers = await client.search({
+            index: 'data',
+            type: 'paper_metadata',
+            body: {
+                query: {
+                    terms: {
+                        published: [date,date2,date3]
+                    }
+                }
+            }
+        });
+
+        for (const article of lastThreeDaysPapers.hits.hits) {
+            console.log('LastThreeDaysPapers:', lastThreeDaysPapers);
+        }
+
+    });
+        // date = yyyy + '-' + mm + '-' + Number(dd - 2);
+        // const response2 = await client.search({
+        //     index: 'data',
+        //     type: 'paper_metadata',
+        //     body: {
+        //         query: {
+        //             match: {
+        //                 published: date
+        //             }
+        //         }
+        //     }
+        // });
+
+        // for (const article of response2.hits.hits) {
+        //     console.log('article:', article);
+        // }
+
+        // date = yyyy + '-' + mm + '-' + Number(dd - 3);
+        // const response3 = await client.search({
+        //     index: 'data',
+        //     type: 'paper_metadata',
+        //     body: {
+        //         query: {
+        //             match: {
+        //                 published: date
+        //             }
+        //         }
+        //     }
+        // });
+
+        // for (const article of response3.hits.hits) {
+        //     console.log('article:', article);
+        // }
+    
