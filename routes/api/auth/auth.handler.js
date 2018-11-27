@@ -4,13 +4,27 @@ const JWT = require("../../../utils/jwt");
 class AuthHandler {
   async getUserHandle(req, res, next, db) {
     try {
-      const result = await db.User.findByPk(req.query.userId);
-      if (!result) {
+      const user = await db.User.findOne({ where: { id: req.query.userId } });
+      if (!user) {
         res
           .status(404)
           .send(Formatter.parseError({ message: "Username not found." }, 404));
       } else {
-        res.status(200).send(Formatter.parseResponse(result, 200));
+        res.status(200).send(
+          Formatter.parseResponse(
+            {
+              id: user.id,
+              firstName: user.firstName,
+              lastName: user.lastName,
+              email: user.email,
+              bio: user.bio,
+              github: user.github,
+              linkedIn: user.linkedIn,
+              twitter: user.twitter
+            },
+            200
+          )
+        );
       }
     } catch (error) {
       next(error);
@@ -26,11 +40,13 @@ class AuthHandler {
         }
       });
       if (!wasCreated) {
-        res.status(409).send({ message: "User Already exists.", status: 409 });
+        res
+          .status(409)
+          .send(Formatter.parseError({ message: "User Already exists." }, 409));
       } else {
         res
           .status(201)
-          .send({ message: "User successfully created.", status: 201 });
+          .send(Formatter.parseResponse("User successfully created.", 201));
       }
     } catch (error) {
       next(error);
@@ -39,7 +55,7 @@ class AuthHandler {
 
   async loginUserHandle(req, res, next, db) {
     try {
-      const user = await db.User.findOne({ email: req.body.email });
+      const user = await db.User.findOne({ where: { email: req.body.email } });
       if (!user) {
         res
           .status(404)
@@ -85,21 +101,23 @@ class AuthHandler {
 
   async updateUserHandle(req, res, next, db) {
     try {
-      const user = await db.User.findByPk(req.query.userId);
+      const user = await db.User.findOne({ where: { id: req.query.userId } });
       if (!user) {
         res
           .status(404)
           .send(Formatter.parseError({ message: "User not found." }, 404));
       } else {
-        const updated = await user.updateAttributes(req.body);
+        const updated = await user.update(req.body, {
+          where: { id: user.id }
+        });
         if (updated) {
           res
             .status(200)
             .send(Formatter.parseResponse("User updated successfully.", 200));
         } else {
           res
-            .status(200)
-            .send(Formatter.parseResponse("User not updated.", 200));
+            .status(409)
+            .send(Formatter.parseResponse("User not updated.", 409));
         }
       }
     } catch (error) {

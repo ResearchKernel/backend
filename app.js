@@ -1,6 +1,5 @@
 const dotenv = require("dotenv");
 dotenv.config();
-const createError = require("http-errors");
 const express = require("express");
 const path = require("path");
 const cookieParser = require("cookie-parser");
@@ -46,7 +45,7 @@ initializeDb(db => {
   });
 
   app.get("/", ({ res }) => res.json({ msg: "Status OK" }));
-  app.use("/api", require("./routes/index")({ logger, ES, AWS, db }));
+  app.use("/api", indexRouter({ logger, ES, AWS, db }));
 
   // error handler
   app.use(function(error, req, res, next) {
