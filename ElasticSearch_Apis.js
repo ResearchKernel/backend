@@ -1,4 +1,11 @@
 var elasticsearch = require('elasticsearch');
+
+var subDays = require('date-fns/sub_days');
+var subMonths = require('date-fns/sub_months');
+var subWeeks = require('date-fns/sub_weeks');
+var subYears = require('date-fns/sub_years')
+var format = require('date-fns/format')
+
 var client = new elasticsearch.Client({
     host: 'https://search-researchkernel-634iskudbbrvfruaytepewyo3i.us-east-1.es.amazonaws.com/',
     log: 'trace'
@@ -26,76 +33,178 @@ today = yyyy + '-' + mm + '-' + dd;
 client.ping({
 
 }, async function getPapersByDate(error) {
-    
+
     date = yyyy + '-' + mm + '-' + Number(dd - 1);
+    var result5 = subDays(today, 1);
+
+    var lastDayDates = format(
+        result5,
+        'YYYY-MM-DD'
+    )
     
-        const lastOneDayPapers = await client.search({
-            index: 'data',
-            type: 'paper_metadata',
-            body: {
-                query: {
-                    match: {
-                        published: date
-                        }
-                    }
-                }
-            })
+    console.log("!**********Last One Day Papers***********!");
 
-        for (const article of lastOneDayPapers.hits.hits) {
-             console.log('lastOneDayPapers: ', lastOneDayPapers);
-            }
-
-    date2 = yyyy + '-' + mm + '-' + Number(dd - 2);
-    date3 = yyyy + '-' + mm + '-' + Number(dd - 3);
-      
-        const lastThreeDaysPapers = await client.search({
-            index: 'data',
-            type: 'paper_metadata',
-            body: {
-                query: {
-                    terms: {
-                        published: [date,date2,date3]
-                    }
+    const lastOneDayPapers = await client.search({
+        index: 'data',
+        type: 'paper_metadata',
+        body: {
+            query: {
+                match: {
+                    published: lastDayDates
                 }
             }
-        });
+        }
+    })
 
-        for (const article of lastThreeDaysPapers.hits.hits) {
-            console.log('LastThreeDaysPapers:', lastThreeDaysPapers);
+    for (const article of lastOneDayPapers.hits.hits) {
+        console.log('lastOneDayPapers: ', lastOneDayPapers);
+    }
+
+    var result6 = subDays(today, 2);
+    var result7 = subDays(today, 3);
+
+    var lastTwoDayDates = format(
+        result6,
+        'YYYY-MM-DD'
+    )
+    
+    var lastThreeDayDates = format(
+        result7,
+        'YYYY-MM-DD'
+    )
+
+    console.log("!**********Last 3 days Papers***********!");
+
+    const lastThreeDaysPapers = await client.search({
+        index: 'data',
+        type: 'paper_metadata',
+        body: {
+            query: {
+                terms: {
+                    published: [lastDayDates, lastTwoDayDates, lastThreeDayDates]
+                }
+            }
+        }
+    });
+
+    for (const article of lastThreeDaysPapers.hits.hits) {
+        console.log('LastThreeDaysPapers:', lastThreeDaysPapers);
+    }
+
+    var result1 = subWeeks(today, 1); 
+
+    var lastWeekDates = format(
+        result1,
+        'YYYY-MM-DD'
+    )
+    console.log("!**********Last Week Papers***********!");
+
+    const getLastWeekPapers = await client.search({
+        index: 'data',
+        type: 'paper_metadata',
+        body: {
+            query: {
+                range: {
+                    published: {
+                        gt: lastWeekDates,
+                        lt: today
+                    }
+                }
+            }
         }
 
     });
-        // date = yyyy + '-' + mm + '-' + Number(dd - 2);
-        // const response2 = await client.search({
-        //     index: 'data',
-        //     type: 'paper_metadata',
-        //     body: {
-        //         query: {
-        //             match: {
-        //                 published: date
-        //             }
-        //         }
-        //     }
-        // });
 
-        // for (const article of response2.hits.hits) {
-        //     console.log('article:', article);
-        // }
+    for (const article of getLastWeekPapers.hits.hits) {
+        console.log('LastWeekPapers:', getLastWeekPapers);
+    }
 
-        // date = yyyy + '-' + mm + '-' + Number(dd - 3);
-        // const response3 = await client.search({
-        //     index: 'data',
-        //     type: 'paper_metadata',
-        //     body: {
-        //         query: {
-        //             match: {
-        //                 published: date
-        //             }
-        //         }
-        //     }
-        // });
+        var result3 = subMonths(today, 1);
 
-        // for (const article of response3.hits.hits) {
-        //     console.log('article:', article);
-        // }
+        var lastMonthDates = format(
+            result3,
+            'YYYY-MM-DD'
+        )
+        console.log("!**********Last Month Papers***********!");
+
+        const getLastMonthPapers = await client.search({
+            index: 'data',
+            type: 'paper_metadata',
+            body: {
+                query: {
+                    range: {
+                        published: {
+                            gt: lastMonthDates,
+                            lt: today
+                        }
+                    }
+                }
+            }
+
+        });
+
+        for (const article of getLastMonthPapers.hits.hits) {
+            console.log('LastMonthPapers:', getLastMonthPapers);
+        }
+
+
+    var result2 = subMonths(today, 6);
     
+    var lastSixMonthsDates = format(
+        result2,
+        'YYYY-MM-DD'
+    )
+    console.log("!**********Last Six Months Papers***********!");
+    
+        const getLastSixMonthsPapers = await client.search({
+            index: 'data',
+            type: 'paper_metadata',
+            body: {
+                query: {
+                    range: {
+                        published: {
+                            gt: lastSixMonthsDates ,
+                            lt: today
+                        }
+                    }
+                }
+            }
+         
+        });
+        
+    for (const article of getLastSixMonthsPapers.hits.hits) {
+         console.log('LastSixMonthsPapers:', getLastSixMonthsPapers);
+     }
+
+var result4 = subYears(today, 1);
+
+var lastOneYearDates = format(
+    result4,
+    'YYYY-MM-DD'
+)
+console.log("!**********Last One Year Papers***********!");
+
+const getLastOneYearPapers = await client.search({
+    index: 'data',
+    type: 'paper_metadata',
+    body: {
+        query: {
+            range: {
+                published: {
+                    gt: lastOneYearDates,
+                    lt: today
+                }
+            }
+        }
+    }
+
+});
+
+for (const article of getLastOneYearPapers.hits.hits) {
+    console.log('LastOneYearPapers:', getLastOneYearPapers);
+}
+
+});
+
+
+
