@@ -78,6 +78,7 @@ class AuthHandler {
                 github: user.github,
                 linkedIn: user.linkedIn,
                 twitter: user.twitter,
+                google: user.google,
                 token
               },
               200
@@ -120,6 +121,50 @@ class AuthHandler {
             .send(Formatter.parseResponse("User not updated.", 409));
         }
       }
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async googleAuth(req, res, next, db) {
+    const payload = {
+      firstName: req.body.firstName,
+      lastName: req.body.lastName,
+      email: req.body.email
+    };
+    try {
+      let [user, wasCreated] = await db.User.findOrCreate({
+        where: { email: req.body.email },
+        defaults: {
+          ...payload
+        }
+      });
+      if (!wasCreated) {
+        // user already exists
+        // update user
+        user = await user.update(payload, {
+          where: { id: user.id }
+        });
+      }
+      const token = await JWT.signJWT({ userId: user.id });
+      res.status(200).send(
+        Formatter.parseResponse(
+          {
+            id: user.id,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            email: user.email,
+            bio: user.bio,
+            github: user.github,
+            linkedIn: user.linkedIn,
+            twitter: user.twitter,
+            google: user.google,
+            // isAuthenticated: user.isAuthenticated,
+            token
+          },
+          200
+        )
+      );
     } catch (error) {
       next(error);
     }

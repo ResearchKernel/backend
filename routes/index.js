@@ -40,5 +40,9 @@ module.exports = ({ logger, db, AWS }) => {
     AuthHandler.loginUserHandle(req, res, next, db);
   });
 
+  router.route("/auth/google").post((req, res, next) => {
+    AuthHandler.googleAuth(req, res, next, db);
+  });
+
   return router;
 };

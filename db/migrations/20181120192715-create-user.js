@@ -36,6 +36,12 @@ module.exports = {
       twitter: {
         type: Sequelize.TEXT
       },
+      google: {
+        type: Sequelize.TEXT
+      },
+      // isAuthenticated: {
+      //   type: Sequelize.BOOLEAN
+      // },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

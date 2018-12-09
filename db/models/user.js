@@ -13,7 +13,9 @@ module.exports = (sequelize, DataTypes) => {
       bio: DataTypes.TEXT,
       github: DataTypes.STRING,
       linkedIn: DataTypes.STRING,
-      twitter: DataTypes.STRING
+      twitter: DataTypes.STRING,
+      google: DataTypes.STRING
+      // isAuthenticated: { type: DataTypes.BOOLEAN, default: true }
     },
     {
       timestamps: true,
