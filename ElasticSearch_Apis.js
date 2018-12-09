@@ -42,7 +42,7 @@ client.ping({
         'YYYY-MM-DD'
     )
     
-    console.log("!**********Last One Day Papers***********!");
+    //console.log("!**********Last One Day Papers***********!");
 
     const lastOneDayPapers = await client.search({
         index: 'data',
@@ -56,9 +56,9 @@ client.ping({
         }
     })
 
-    for (const article of lastOneDayPapers.hits.hits) {
-        console.log('lastOneDayPapers: ', lastOneDayPapers);
-    }
+    //for (const article of lastOneDayPapers.hits.hits) {
+      //  console.log('lastOneDayPapers: ', lastOneDayPapers);
+    //}
 
     var result6 = subDays(today, 2);
     var result7 = subDays(today, 3);
@@ -73,7 +73,7 @@ client.ping({
         'YYYY-MM-DD'
     )
 
-    console.log("!**********Last 3 days Papers***********!");
+    //console.log("!**********Last 3 days Papers***********!");
 
     const lastThreeDaysPapers = await client.search({
         index: 'data',
@@ -87,9 +87,9 @@ client.ping({
         }
     });
 
-    for (const article of lastThreeDaysPapers.hits.hits) {
-        console.log('LastThreeDaysPapers:', lastThreeDaysPapers);
-    }
+    //for (const article of lastThreeDaysPapers.hits.hits) {
+      //  console.log('LastThreeDaysPapers:', lastThreeDaysPapers);
+    //}
 
     var result1 = subWeeks(today, 1); 
 
@@ -97,7 +97,7 @@ client.ping({
         result1,
         'YYYY-MM-DD'
     )
-    console.log("!**********Last Week Papers***********!");
+    //console.log("!**********Last Week Papers***********!");
 
     const getLastWeekPapers = await client.search({
         index: 'data',
@@ -115,9 +115,9 @@ client.ping({
 
     });
 
-    for (const article of getLastWeekPapers.hits.hits) {
-        console.log('LastWeekPapers:', getLastWeekPapers);
-    }
+    //for (const article of getLastWeekPapers.hits.hits) {
+      //  console.log('LastWeekPapers:', getLastWeekPapers);
+    //}
 
         var result3 = subMonths(today, 1);
 
@@ -125,7 +125,7 @@ client.ping({
             result3,
             'YYYY-MM-DD'
         )
-        console.log("!**********Last Month Papers***********!");
+      //  console.log("!**********Last Month Papers***********!");
 
         const getLastMonthPapers = await client.search({
             index: 'data',
@@ -143,9 +143,9 @@ client.ping({
 
         });
 
-        for (const article of getLastMonthPapers.hits.hits) {
-            console.log('LastMonthPapers:', getLastMonthPapers);
-        }
+        //for (const article of getLastMonthPapers.hits.hits) {
+        //    console.log('LastMonthPapers:', getLastMonthPapers);
+        //}
 
 
     var result2 = subMonths(today, 6);
@@ -154,7 +154,7 @@ client.ping({
         result2,
         'YYYY-MM-DD'
     )
-    console.log("!**********Last Six Months Papers***********!");
+    //console.log("!**********Last Six Months Papers***********!");
     
         const getLastSixMonthsPapers = await client.search({
             index: 'data',
@@ -172,9 +172,9 @@ client.ping({
          
         });
         
-    for (const article of getLastSixMonthsPapers.hits.hits) {
-         console.log('LastSixMonthsPapers:', getLastSixMonthsPapers);
-     }
+    //for (const article of getLastSixMonthsPapers.hits.hits) {
+      //   console.log('LastSixMonthsPapers:', getLastSixMonthsPapers);
+     //}
 
 var result4 = subYears(today, 1);
 
@@ -182,7 +182,7 @@ var lastOneYearDates = format(
     result4,
     'YYYY-MM-DD'
 )
-console.log("!**********Last One Year Papers***********!");
+//console.log("!**********Last One Year Papers***********!");
 
 const getLastOneYearPapers = await client.search({
     index: 'data',
@@ -200,9 +200,9 @@ const getLastOneYearPapers = await client.search({
 
 });
 
-for (const article of getLastOneYearPapers.hits.hits) {
-    console.log('LastOneYearPapers:', getLastOneYearPapers);
-}
+//for (const article of getLastOneYearPapers.hits.hits) {
+   // console.log('LastOneYearPapers:', getLastOneYearPapers);
+//}
 
 });
 
